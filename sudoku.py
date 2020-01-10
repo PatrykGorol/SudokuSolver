@@ -44,7 +44,7 @@ class Sudoku:
         self.squares: List[SudokuElement] = [SudokuElement(k[0], k[1], k[2], k[3]) for k in self.square_coordinates]
         self.elements_count: Dict[int: int] = {}
         self.available_digits: List[int] = []
-        self.unchecked_stock: List[SudokuElement] = []
+        self.unchecked_stack: List[SudokuElement] = []
         self.zero_positions: List[Tuple[int, int]] = []
         self.possible_digits_in_cells: Dict[Tuple[int, int]: List[int]] = {}
         self.changed: bool = False

@@ -100,7 +100,7 @@ class SudokuSolver:
 
     def increment_digit_and_add_to_stock(self, elements_list: List[SudokuElement], index: int) -> None:
         elements_list[index].increment_digits()
-        self.s.unchecked_stock.append(elements_list[index])
+        self.s.unchecked_stack.append(elements_list[index])
 
     def find_square(self, row_index: int, column_index: int) -> int:
         sq_number = 0
@@ -113,10 +113,10 @@ class SudokuSolver:
         return sq_number
 
     def check_stock(self) -> None:
-        self.s.unchecked_stock = list(set(self.s.unchecked_stock))
-        while len(self.s.unchecked_stock):
-            self.fill_element(self.s.unchecked_stock[-1])
-            self.s.unchecked_stock.pop()
+        self.s.unchecked_stack = list(set(self.s.unchecked_stack))
+        while len(self.s.unchecked_stack):
+            self.fill_element(self.s.unchecked_stack[-1])
+            self.s.unchecked_stack.pop()
 
     def solve(self) -> None:
         self.counter = 0
@@ -294,3 +294,4 @@ class SudokuSolver:
             print('This sudoku is unsolvable.')
         else:
             print(self.s)
+
