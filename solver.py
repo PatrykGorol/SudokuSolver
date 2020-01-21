@@ -16,17 +16,21 @@ class SudokuSolver:
         self.counter: int = 0
 
     def main_sequence(self) -> None:
-        self.validate_sudoku()
-        self.if_already_completed()
-        self.pre_solving_check()
-        self.solve()
-        self.try_random_insert()
-        self.post_solving_summary()
+        if self.validate_sudoku():
+            if not self.is_already_completed():
+                self.pre_solving_check()
+                self.solve()
+                self.try_random_insert()
+                self.post_solving_summary()
 
-    def validate_sudoku(self) -> None:
+    def validate_sudoku(self) -> bool:
+        if self.s.elements_count[0] == 81:
+            print('This sudoku is empty')
+            return False
         if not self.check_occurences():
             print('This sudoku array contains invalid digits.')
-            exit()
+            return False
+        return True
 
     def check_occurences(self) -> bool:
         if self.check_if_one_occurence_of_digit(self.s.rows):
@@ -44,10 +48,11 @@ class SudokuSolver:
                     return False
         return True
 
-    def if_already_completed(self) -> None:
+    def is_already_completed(self) -> bool:
         if self.is_sudoku_completed():
             print('This sudoku is already completed.')
-            exit()
+            return True
+        return False
 
     def pre_solving_check(self) -> None:
         self.check_elements(self.s.rows)
