@@ -12,7 +12,7 @@ class EntryCell:
 
     def __init__(self, cell: tk.Frame):
         self._text = tk.StringVar()
-        self.entry = tk.Entry(cell, borderwidth=0, justify='center', font=1, textvariable=self._text)
+        self.entry = tk.Entry(cell, borderwidth=0, justify='center', font='Helvetica 14 bold', textvariable=self._text)
         self.entry.place(width=33, heigh=33)
         self._text.trace("w", lambda *args: self.character_limit())
 
@@ -92,18 +92,37 @@ class Window:
     def solve(self) -> None:
         sudoku = Sudoku(self.get_data())
         solver = SudokuSolver(sudoku)
-        solver.main_sequence()
+        validation = solver.validate_sudoku()
+        if validation == 1:
+            solver.main_sequence()
+            self.get_result(solver)
+        elif validation == -1:
+            self.status_bar.config(text='This sudoku array contains invalid digits.', fg='red')
+
+    def get_result(self, solver: SudokuSolver):
+        if solver.is_sudoku_completed():
+            for row in range(9):
+                for column in range(9):
+                    if self.entries[row][column].text == '':
+                        self.entries[row][column].text = solver.s.array[row, column]
+                        self.entries[row][column].entry.config(fg='blue')
+        else:
+            self.status_bar.config(text='This sudoku is unsolvable.', fg='red')
 
     def clear(self):
         for row in self.entries:
             for entry in row:
                 entry.text = ''
+                entry.entry.config(fg='black')
+        self.status_bar.config(text='Ready', fg='black')
 
     def example(self):
         random_sudoku = choice(sudoku_examples)
         for row in range(9):
             for column in range(9):
                 self.entries[row][column].text = str(random_sudoku.array[row, column])
+                self.entries[row][column].entry.config(fg='black')
+        self.status_bar.config(text='Ready', fg='black')
 
 
 if __name__ == '__main__':

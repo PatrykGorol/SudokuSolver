@@ -42,7 +42,7 @@ class Sudoku:
         self.rows: List[SudokuElement] = [SudokuRow(i) for i in range(9)]
         self.columns: List[SudokuElement] = [SudokuColumn(j) for j in range(9)]
         self.squares: List[SudokuElement] = [SudokuElement(k[0], k[1], k[2], k[3]) for k in self.square_coordinates]
-        self.elements_count: Dict[int: int] = {}
+        self.elements_count: Dict[int: int] = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0}
         self.available_digits: List[int] = []
         self.unchecked_stack: List[SudokuElement] = []
         self.zero_positions: List[Tuple[int, int]] = []
@@ -56,8 +56,9 @@ class Sudoku:
         self.zero_positions = list(zip(zero_positions[0], zero_positions[1]))
 
     def set_statistics(self) -> None:
-        unique, counter = np.unique(self.array, return_counts=True)
-        self.elements_count = dict(sorted(zip(unique, counter), key=lambda x: x[1], reverse=True))
+        for digit in self.elements_count:
+            self.elements_count[digit] = np.count_nonzero(self.array == digit)
+        self.elements_count = dict(sorted(self.elements_count.items(), key=lambda x: x[1], reverse=True))
         self.available_digits = [k for k, v in self.elements_count.items() if k > 0 and v < 9]
         self.set_elements_statistics(self.rows)
         self.set_elements_statistics(self.columns)

@@ -3,7 +3,6 @@ from itertools import product, chain
 from collections import Counter
 from random import choice
 from copy import deepcopy
-from sys import exit
 
 import numpy as np
 
@@ -16,21 +15,17 @@ class SudokuSolver:
         self.counter: int = 0
 
     def main_sequence(self) -> None:
-        if self.validate_sudoku():
-            if not self.is_already_completed():
-                self.pre_solving_check()
-                self.solve()
-                self.try_random_insert()
-                self.post_solving_summary()
+        if not self.is_already_completed():
+            self.pre_solving_check()
+            self.solve()
+            self.try_random_insert()
 
-    def validate_sudoku(self) -> bool:
+    def validate_sudoku(self) -> int:
         if self.s.elements_count[0] == 81:
-            print('This sudoku is empty')
-            return False
+            return 0
         if not self.check_occurences():
-            print('This sudoku array contains invalid digits.')
-            return False
-        return True
+            return -1
+        return 1
 
     def check_occurences(self) -> bool:
         if self.check_if_one_occurence_of_digit(self.s.rows):
@@ -50,7 +45,7 @@ class SudokuSolver:
 
     def is_already_completed(self) -> bool:
         if self.is_sudoku_completed():
-            print('This sudoku is already completed.')
+            # print('This sudoku is already completed.')
             return True
         return False
 
@@ -293,10 +288,3 @@ class SudokuSolver:
             return list(elements)[0]
         else:
             return None
-
-    def post_solving_summary(self):
-        if not self.is_sudoku_completed():
-            print('This sudoku is unsolvable.')
-        else:
-            print(self.s)
-
