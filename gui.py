@@ -42,24 +42,28 @@ class EntryCell:
 class Window:
 
     def __init__(self, master: tk.Tk) -> None:
-        master.title('SudokuSolver')
-        master.iconbitmap(r'sudoku.ico')
-        self.instruction = tk.Label(master, text='Insert Sudoku below.', font=20)
-        self.instruction.grid(row=0, column=0, columnspan=9, pady=10)
-        self.frame = tk.LabelFrame(master, padx=10, pady=10)
-        self.frame.grid(row=1, column=0, columnspan=9)
-        # self.squares = {}
-        # self.cells = {}
+        self.set_general_properties(master)
+        frame = tk.LabelFrame(master, padx=10, pady=10)
+        frame.grid(row=1, column=0, columnspan=9)
         self.entries: List[List[EntryCell]] = [[], [], [], [], [], [], [], [], []]
-        self.create_grid(self.frame)
-        self.solve_button = tk.Button(self.frame, text='Solve Sudoku', font=10, command=self.solve)
-        self.solve_button.grid(row=9, column=0, pady=(10, 0))
-        self.examples_button = tk.Button(self.frame, text='Get example', font=1, command=self.example)
-        self.examples_button.grid(row=9, column=1, pady=(10, 0))
-        self.clear_button = tk.Button(self.frame, text='Clear Sudoku', font=10, command=self.clear)
-        self.clear_button.grid(row=9, column=2, pady=(10, 0))
+        self.create_grid(frame)
+        self.create_buttons(frame)
         self.status_bar = tk.Label(master, text='Ready', anchor='e')
         self.status_bar.grid(row=2, column=0, columnspan=9, sticky='we')
+
+    def set_general_properties(self, master) -> None:
+        master.title('SudokuSolver')
+        master.iconbitmap(r'sudoku.ico')
+        instruction = tk.Label(master, text='Insert Sudoku below.', font=20)
+        instruction.grid(row=0, column=0, columnspan=9, pady=10)
+
+    def create_buttons(self, frame) -> None:
+        solve_button = tk.Button(frame, text='Solve Sudoku', font=10, command=self.solve)
+        solve_button.grid(row=9, column=0, pady=(10, 0))
+        examples_button = tk.Button(frame, text='Get example', font=1, command=self.example)
+        examples_button.grid(row=9, column=1, pady=(10, 0))
+        clear_button = tk.Button(frame, text='Clear Sudoku', font=10, command=self.clear)
+        clear_button.grid(row=9, column=2, pady=(10, 0))
 
     def create_grid(self, main_frame: tk.LabelFrame) -> None:
         for square_row in range(3):
@@ -67,10 +71,9 @@ class Window:
                 frame = tk.Frame(main_frame, highlightbackground='black', highlightcolor='red',
                                  highlightthickness=1, width=120, heigh=120, padx=0)
                 frame.grid(row=square_row, column=square_column)
-                self.create_cells_and_entries(frame, square_column, square_row)
-                # self.squares[(square_row, square_column)] = frame
+                self.create_cells_and_entries(frame, square_row)
 
-    def create_cells_and_entries(self, frame: tk.Frame, square_column: int, square_row: int) -> None:
+    def create_cells_and_entries(self, frame: tk.Frame, square_row: int) -> None:
         for row in range(3):
             for column in range(3):
                 cell = tk.Frame(frame, bg='white', highlightbackground='black',
@@ -78,12 +81,10 @@ class Window:
                                 width=40, heigh=40, padx=3, pady=3)
                 cell.grid(row=row, column=column)
                 row_index = square_row * 3 + row
-                # column_index = square_column * 3 + column
                 entry_cell = EntryCell(cell)
-                # self.cells[(row_index, column_index)] = cell
                 self.entries[row_index].append(entry_cell)
 
-    def get_data(self):
+    def get_data(self) -> List[List[int]]:
         sudoku_array = []
         for row in self.entries:
             sudoku_array.append([0 if entry.text == '' else int(entry.text) for entry in row])
@@ -99,24 +100,27 @@ class Window:
         elif validation == -1:
             self.status_bar.config(text='This sudoku array contains invalid digits.', fg='red')
 
-    def get_result(self, solver: SudokuSolver):
+    def get_result(self, solver: SudokuSolver) -> None:
         if solver.is_sudoku_completed():
-            for row in range(9):
-                for column in range(9):
-                    if self.entries[row][column].text == '':
-                        self.entries[row][column].text = solver.s.array[row, column]
-                        self.entries[row][column].entry.config(fg='blue')
+            self.insert_digits(solver)
         else:
             self.status_bar.config(text='This sudoku is unsolvable.', fg='red')
 
-    def clear(self):
+    def insert_digits(self, solver) -> None:
+        for row in range(9):
+            for column in range(9):
+                if self.entries[row][column].text == '':
+                    self.entries[row][column].text = solver.s.array[row, column]
+                    self.entries[row][column].entry.config(fg='blue')
+
+    def clear(self) -> None:
         for row in self.entries:
             for entry in row:
                 entry.text = ''
                 entry.entry.config(fg='black')
         self.status_bar.config(text='Ready', fg='black')
 
-    def example(self):
+    def example(self) -> None:
         random_sudoku = choice(sudoku_examples)
         for row in range(9):
             for column in range(9):

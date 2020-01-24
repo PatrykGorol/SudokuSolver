@@ -58,11 +58,14 @@ class Sudoku:
     def set_statistics(self) -> None:
         for digit in self.elements_count:
             self.elements_count[digit] = np.count_nonzero(self.array == digit)
-        self.elements_count = dict(sorted(self.elements_count.items(), key=lambda x: x[1], reverse=True))
-        self.available_digits = [k for k, v in self.elements_count.items() if k > 0 and v < 9]
+        self.set_available_digits()
         self.set_elements_statistics(self.rows)
         self.set_elements_statistics(self.columns)
         self.set_elements_statistics(self.squares)
+
+    def set_available_digits(self):
+        self.elements_count = dict(sorted(self.elements_count.items(), key=lambda x: x[1], reverse=True))
+        self.available_digits = [k for k, v in self.elements_count.items() if k > 0 and v < 9]
 
     def set_elements_statistics(self, elements_list: List[SudokuElement]) -> None:
         for element in elements_list:

@@ -88,9 +88,9 @@ class SudokuSolver:
 
     def update_available_elements(self, digit: int) -> None:
         self.s.elements_count[digit] += 1
-        if self.s.elements_count[digit] == 9:
-            self.s.available_digits.remove(digit)
-            # sort available digits???
+        self.s.set_available_digits()
+        # if self.s.elements_count[digit] == 9:
+        #     self.s.available_digits.remove(digit)
 
     def update_elements_statistics(self, row_index: int, column_index: int) -> None:
         self.increment_digit_and_add_to_stock(self.s.rows, row_index)
@@ -125,7 +125,7 @@ class SudokuSolver:
             self.check_available_digits()
         self.check_blank_cells()
 
-    def check_available_digits(self):
+    def check_available_digits(self) -> None:
         digit = self.s.available_digits[self.counter]
         self.s.changed = False
         positions_in_squares = self.get_positions_in_squares(digit)
@@ -154,7 +154,7 @@ class SudokuSolver:
         available_cols = set(i[1] for i in self.s.zero_positions).difference(set(positions[1]))
         return [i for i in product(available_rows, available_cols) if self.s.array[i[0], i[1]] == 0]
 
-    def divide_positions_by_squares(self, available_positions, digit):
+    def divide_positions_by_squares(self, available_positions, digit) -> Dict[int, List[int]]:
         positions_in_squares = {}
         for element in available_positions:
             square_number = self.find_square(element[0], element[1])
@@ -231,7 +231,7 @@ class SudokuSolver:
         if self.s.changed:
             self.check_stock_and_solve_again()
 
-    def try_random_insert(self, max_tries: int = 10):
+    def try_random_insert(self, max_tries: int = 10) -> None:
         number_of_tries = 0
         while len(self.s.zero_positions) and number_of_tries <= max_tries:
             self.random_check()
@@ -249,7 +249,7 @@ class SudokuSolver:
         if not self.is_sudoku_completed():
             self.s = backup_sudoku
 
-    def check_stock_and_solve_again(self):
+    def check_stock_and_solve_again(self) -> None:
         self.check_stock()
         self.solve()
 
