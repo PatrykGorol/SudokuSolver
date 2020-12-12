@@ -153,6 +153,7 @@ class Window:
         :return: None
         """
         if solver.is_sudoku_completed():
+        # if True:
             self.insert_digits(solver)
         else:
             self.status_bar.config(text='This sudoku is unsolvable.', fg='red')

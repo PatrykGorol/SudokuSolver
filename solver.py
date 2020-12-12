@@ -24,7 +24,8 @@ class SudokuSolver:
         if not self.is_sudoku_completed():
             self.pre_solving_check()
             self.solve()
-            self.try_random_insert()
+            # self.try_random_insert()
+            self.backtracking()
         return None
 
     def validate_sudoku(self) -> int:
@@ -476,7 +477,8 @@ class SudokuSolver:
         Checks if there are no blank cells and all elements are correctly filled.
         :return: bool
         """
-        if len(self.s.zero_positions) == 0:
+        # if len(self.s.zero_positions) == 0:
+        if np.count_nonzero(self.s.array) == 81:
             if self.assert_sum_digits_in_element(self.s.rows):
                 if self.assert_sum_digits_in_element(self.s.columns):
                     if self.assert_sum_digits_in_element(self.s.squares):
@@ -521,3 +523,89 @@ class SudokuSolver:
             return list(elements)[0]
         else:
             return None
+
+    def backtracking(self) -> None:
+        counter = 0
+        if len(self.s.zero_positions) == 0:
+            return None
+        self.s.zero_positions.sort(key=lambda x: len(self.s.possible_digits_in_cells[x]), reverse=False)
+        # print(self.s.zero_positions)
+        print(self.s.possible_digits_in_cells)
+        print()
+
+        # x = 1
+        # for coord in self.s.possible_digits_in_cells:
+        #     x *= len(self.s.possible_digits_in_cells[coord])
+        # print('ilość wariantów: {:e}'.format(x))
+        # print()
+
+        # print(len(self.s.zero_positions))
+        # print()
+        digits_counter = {coordinate: 0 for coordinate in self.s.zero_positions}
+        cell_index = 0
+        insertion_list = []
+        while cell_index < len(self.s.zero_positions):
+            counter += 1
+            print(counter)
+            coordinate = self.s.zero_positions[cell_index]
+            insertion_list = [i for i in insertion_list if i[0] != coordinate]
+            # print(f'Coordinate: {coordinate}')
+            # print(f'digits_counter: {digits_counter[coordinate]}')
+            digit_index = digits_counter[coordinate]
+            # print(f'digits: {self.s.possible_digits_in_cells[coordinate]}')
+            # print(f'digit_index: {digit_index}')
+            # print(f'cell_index: {cell_index}')
+
+            if digit_index < len(self.s.possible_digits_in_cells[coordinate]):
+                digit = self.s.possible_digits_in_cells[coordinate][digit_index]
+                # self.s.array[coordinate[0], coordinate[1]] = digit
+                insertion_list.append((coordinate, digit))
+            else:
+                digits_counter[coordinate] = 0
+                # self.s.array[coordinate[0], coordinate[1]] = 0
+                cell_index -= 1
+                # insertion_list = [i for i in insertion_list if i[0] != coordinate]
+                # print('previous_cell')
+                # print()
+                if cell_index < 0:
+                    break
+                continue
+
+            if self.check_occurences_in_potential_array(insertion_list):
+                # print(insertion_list)
+                if self.try_insert(insertion_list):
+                    return None
+                digits_counter[coordinate] += 1
+                cell_index += 1
+                # print(f'Digit: {digit}')
+                # print('next cell')
+                # print()
+                continue
+            else:
+                digits_counter[coordinate] += 1
+                # insertion_list.pop()
+
+        print(self.s.array)
+        return None
+
+    def check_occurences_in_potential_array(self, insertion_list: List[Tuple[Tuple[int, int], int]]) -> bool:
+        backup_sudoku = deepcopy(self.s)
+        for item in insertion_list:
+            self.s.array[item[0][0], item[0][1]] = item[1]
+        if self.check_occurences():
+            self.s = backup_sudoku
+            return True
+        else:
+            self.s = backup_sudoku
+            return False
+
+    def try_insert(self, insertion_list: List[Tuple[Tuple[int, int], int]]) -> bool:
+        backup_sudoku = deepcopy(self.s)
+        for item in insertion_list:
+            self.insert_digit(item[1], item[0][0], item[0][1])
+        self.check_stack_and_solve_again()
+        if not self.is_sudoku_completed():
+            self.s = backup_sudoku
+            return False
+        return True
+

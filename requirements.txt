@@ -1,0 +1,14 @@
+appdirs==1.4.3
+attrs==19.3.0
+black==19.3b0
+certifi==2019.9.11
+Click==7.0
+mkl-fft==1.0.15
+mkl-random==1.1.0
+mkl-service==2.3.0
+numpy==1.17.4
+pipenv==2018.11.26
+six==1.13.0
+toml==0.10.0
+virtualenv-clone==0.5.3
+wincertstore==0.2
