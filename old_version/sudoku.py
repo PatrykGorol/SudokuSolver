@@ -15,7 +15,7 @@ class SudokuElement:
 
     def increment_digits(self) -> None:
         """
-        Each time digit is inserted into sudoku element, increment counter.
+        Each time number is inserted into sudoku element, increment counter.
         If all 9 digits have been inserted, mark element as completed.
         :return: None
         """

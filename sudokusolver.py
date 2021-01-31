@@ -7,70 +7,70 @@ class SudokuSolver:
 
     def __init__(self, array: List[List[int]]):
         self.sudoku = np.array(array)
-        self.zero_positions = list(zip(np.where(self.sudoku == 0)[0], np.where(self.sudoku == 0)[1]))
-        self.digits = {coord: 1 for coord in self.zero_positions}
+        self.empty_cells = list(zip(np.where(self.sudoku == 0)[0], np.where(self.sudoku == 0)[1]))
+        self.test_numbers = {coord: 1 for coord in self.empty_cells}
 
     def solve(self) -> None:
         '''
         Backtracking method of solving sudoku.
-        For consecutive empty cells method checks subsequent digits (from 1 to 9).
-        If digit is permissible, program inserts digit and moves to next empty cell.
-        If digit in impermissible, program checks next digit.
-        If all 9 digits were already checked and none of them was permissible,
-        program returns to the previous empty cell and tries next digit.
+        For consecutive empty cells method checks subsequent numbers (from 1 to 9).
+        If number is permissible, program inserts number and moves to next empty cell.
+        If number in impermissible, program checks next number.
+        If all 9 numbers were already checked and none of them was permissible,
+        program returns to the previous empty cell and tries next number.
         :return: None
         '''
-        i = 0
-        while i < len(self.zero_positions):
-            coords = self.zero_positions[i]
+        cell_index = 0
+        while cell_index < len(self.empty_cells):
+            coords = self.empty_cells[cell_index]
             row, column = coords
-            digit = self.digits[coords]
+            number = self.test_numbers[coords]
 
-            if digit == 10:
-                self.insert_digit(row, column)
-                self.digits[coords] = 1
-                i -= 1
+            if number == 10:
+                self.insert_number(row, column)
+                self.test_numbers[coords] = 1
+                cell_index -= 1
                 continue
 
-            if self.validate_digit(row, column, digit):
-                self.insert_digit(row, column, digit)
-                i += 1
-            self.digits[coords] += 1
+            if self.validate_number(row, column, number):
+                self.insert_number(row, column, number)
+                cell_index += 1
+            self.test_numbers[coords] += 1
 
         return None
 
-    def validate_digit(self, row: int, column: int, digit: int) -> bool:
+    def validate_number(self, row: int, column: int, number: int) -> bool:
         '''
-        Checks if digit is available in place indicated by coordinates.
+        Checks if number is available in place indicated by coordinates.
         If such number is already present in row, column or box, method returns False.
         :param row: row coordinate of cell
         :param column: column coordinate of cell
-        :param digit: digit for checking
-        :return: True if digit is valid in this place, False otherwise
+        :param number: number for checking
+        :return: True if number is valid in this place, False otherwise
         '''
-        if digit in self.sudoku[row, :]:
+        if number in self.sudoku[row, :]:
             return False
-        if digit in self.sudoku[:, column]:
+        if number in self.sudoku[:, column]:
             return False
         box_row, box_column = row // 3 * 3, column // 3 * 3
-        if digit in self.sudoku[box_row:box_row + 3, box_column:box_column + 3]:
+        if number in self.sudoku[box_row:box_row + 3, box_column:box_column + 3]:
             return False
         return True
 
-    def insert_digit(self, row: int, column: int, digit: int = 0) -> None:
+    def insert_number(self, row: int, column: int, number: int = 0) -> None:
         '''
-        Insert digit into cell of provided coordinates.
+        Insert number into cell of provided coordinates.
         :param row: row coordinate of cell to fill
         :param column: column coordinate of cell to fill
-        :param digit: digit to insert
+        :param number: number to insert
         :return: None
         '''
-        self.sudoku[row, column] = digit
+        self.sudoku[row, column] = number
         return None
 
     def validate_sudoku(self) -> int:
         """
-        Checks if sudoku array is valid, i.e. if rows, columns or boxes don't contain duplicated digits.
+        Checks if sudoku array is valid, i.e. if rows, columns or boxes don't contain duplicated numbers.
         :return: 0 if array is empty, 1 if is valid, -1 if invalid
         """
         if np.count_nonzero(self.sudoku) == 0:
@@ -81,18 +81,18 @@ class SudokuSolver:
 
     def check_occurences(self) -> bool:
         '''
-        Checks if every row, column and box contains only one occurrence of digit.
+        Checks if every row, column and box contains only one occurrence of number.
         :return: True if sudoku is valid, otherwise False
         '''
-        for i in range(0, 9):
-            for digit in range(1, 10):
-                if np.count_nonzero(self.sudoku[i, :] == digit) > 1:
+        for e in range(0, 9):
+            for number in range(1, 10):
+                if np.count_nonzero(self.sudoku[e, :] == number) > 1:
                     return False
-                if np.count_nonzero(self.sudoku[:, i] == digit) > 1:
+                if np.count_nonzero(self.sudoku[:, e] == number) > 1:
                     return False
-                box_row = i // 3 * 3
-                box_column = 3 * (i - box_row)
-                if np.count_nonzero(self.sudoku[box_row:box_row + 3, box_column:box_column + 3] == digit) > 1:
+                box_row = e // 3 * 3
+                box_column = 3 * (e - box_row)
+                if np.count_nonzero(self.sudoku[box_row:box_row + 3, box_column:box_column + 3] == number) > 1:
                     return False
         return True
 

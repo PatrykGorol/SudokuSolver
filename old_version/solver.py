@@ -41,7 +41,7 @@ class SudokuSolver:
 
     def check_occurences(self) -> bool:
         """
-        Checks if every row, column and square contains only one occurrence of digit.
+        Checks if every row, column and square contains only one occurrence of number.
         :return: True if sudoku is valid, otherwise False
         """
         if self.check_if_one_occurence_of_digit(self.s.rows):
@@ -87,7 +87,7 @@ class SudokuSolver:
 
     def fill_element(self, element: SudokuElement) -> None:
         """
-        For element with 8 digits already in place, find last digit and insert into blank cell.
+        For element with 8 digits already in place, find last number and insert into blank cell.
         Also upadte statistics of row, column and square containing filled cell.
         :param element: row, column or square
         :return: None
@@ -115,9 +115,9 @@ class SudokuSolver:
 
     def find_last_digit(self, array: np.ndarray) -> int:
         """
-        Get digit an array is lacking. Searches only in available digits' list.
+        Get number an array is lacking. Searches only in available digits' list.
         :param array: sudoku element as an array of digits
-        :return: digit not present in an array; digit to insert
+        :return: number not present in an array; number to insert
         """
         for digit in self.s.available_digits:
             if digit not in array:
@@ -125,9 +125,9 @@ class SudokuSolver:
 
     def insert_digit(self, digit, row_index, column_index) -> None:
         """
-        Insert digit into cell of provided coordinates, delete cell from list of zeros' coordinates.
+        Insert number into cell of provided coordinates, delete cell from list of zeros' coordinates.
         Upadtes available digits and statistics of row, column and square.
-        :param digit: digit to insert
+        :param digit: number to insert
         :param row_index: row coordinate of cell to fill
         :param column_index: column coordinate of cell to fill
         :return: None
@@ -142,9 +142,9 @@ class SudokuSolver:
 
     def update_available_elements(self, digit: int) -> None:
         """
-        Adds digit to the sudoku's digit counter and upadates available digits.
-        I inserted digit is a 9th occurrence, digit is removed from available digits' list.
-        :param digit: inserted digit
+        Adds number to the sudoku's number counter and upadates available digits.
+        I inserted number is a 9th occurrence, number is removed from available digits' list.
+        :param digit: inserted number
         :return: None
         """
         self.s.elements_count[digit] += 1
@@ -167,7 +167,7 @@ class SudokuSolver:
 
     def increment_digit_and_add_to_stack(self, element: SudokuElement) -> None:
         """
-        Increments digit in element's counter and adds element into stack (queue of recently updates elements,
+        Increments number in element's counter and adds element into stack (queue of recently updates elements,
         which enable to check if elements are not easy solvable).
         :param element: sudoku element
         :return: None
@@ -208,7 +208,7 @@ class SudokuSolver:
     def solve(self) -> None:
         """
         Main solving sequence.
-        Checks if there are blank cells where only one digit can be inserted.
+        Checks if there are blank cells where only one number can be inserted.
         :return: None
         """
         self.counter = 0
@@ -220,9 +220,9 @@ class SudokuSolver:
 
     def check_available_digits(self) -> None:
         """
-        For given digit function generates all permissible blank cells.
-        Checks in squares, rows and columns if there is only one possible cell to insert the digit.
-        If all checks don't cause digit insertion, function updates dictionary with all blank cells
+        For given number function generates all permissible blank cells.
+        Checks in squares, rows and columns if there is only one possible cell to insert the number.
+        If all checks don't cause number insertion, function updates dictionary with all blank cells
         and their corresponding permissible digits.
         :return: None
         """
@@ -244,7 +244,7 @@ class SudokuSolver:
     def get_positions_in_squares(self, digit: int) -> Dict[int, List[Tuple[int, int]]]:
         """
         Creates a dictionary with blank cells' coordinates divided by square numbers.
-        :param digit: evaluating digit
+        :param digit: evaluating number
         :return: dictionary with blank cells' coordinates divided by square numbers
         """
         available_positions = self.search_for_available_positions(digit)
@@ -256,9 +256,9 @@ class SudokuSolver:
 
     def search_for_available_positions(self, digit: int) -> List[Tuple[int, int]]:
         """
-        Searches for blank cells where there are no interferences (same digit in a row, column or square)
-        :param digit: digit we are evaluating
-        :return: list of blank cells' coordinates where digit can be inserted
+        Searches for blank cells where there are no interferences (same number in a row, column or square)
+        :param digit: number we are evaluating
+        :return: list of blank cells' coordinates where number can be inserted
         """
         positions = np.where(self.s.array == digit)
         available_rows = set(i[0] for i in self.s.zero_positions).difference(set(positions[0]))
@@ -269,9 +269,9 @@ class SudokuSolver:
         int, List[int]]:
         """
         Creates a dictionary with square numbers as keys and list of black cells' coordinates,
-         where digit can be inserted.
+         where number can be inserted.
         :param available_positions:
-        :param digit: digit we are evaluating
+        :param digit: number we are evaluating
         :return: dictionary with blank cells' coordinates divided by square numbers
         """
         positions_in_squares = {}
@@ -288,7 +288,7 @@ class SudokuSolver:
                                                                  positions_in_squares: Dict[int, List[Tuple[int, int]]],
                                                                  flag: int) -> Dict[int, List[Tuple[int, int]]]:
         """
-        Checks if there are rows or columns inside squares where digit must be inserted.
+        Checks if there are rows or columns inside squares where number must be inserted.
         Deletes the same rows/columns' coordinates in another squares (inside list od available coordinates).
         :param positions_in_squares: list of available blank cells' coordinates divided by squares
         :param flag: 0 for row, 1 for column
@@ -304,11 +304,11 @@ class SudokuSolver:
                                        square: int) -> None:
         """
         Get all potential (for insertion) blank cells' coordinates and deletes non-valid coordinates.
-        Non-valid coordinates are ones that digit MUST be inserted in the same row/column but in another square.
+        Non-valid coordinates are ones that number MUST be inserted in the same row/column but in another square.
         :param element: number of row or column
         :param flag: 0 for row, 1 for column
         :param positions_in_squares: list of available blank cells' coordinates divided by squares
-        :param square: number of square where digit must be inserted
+        :param square: number of square where number must be inserted
         :return: updated list of available blank cells' coordinates divided by squares
         """
         if element:
@@ -322,9 +322,9 @@ class SudokuSolver:
     def insert_digit_if_only_one_possible_position_in_square(self, digit: int, positions_in_squares: Dict[
         int, List[Tuple[int, int]]]) -> None:
         """
-        If there is only one available (for aur digit) blank cell inside a square, it can be filled.
-        Function inserts a digit and sets sudoku array status on "changed".
-        :param digit: evaluating digit
+        If there is only one available (for aur number) blank cell inside a square, it can be filled.
+        Function inserts a number and sets sudoku array status on "changed".
+        :param digit: evaluating number
         :param positions_in_squares: list of available blank cells' coordinates divided by squares
         :return: None
         """
@@ -336,8 +336,8 @@ class SudokuSolver:
 
     def insert_and_set_changed(self, digit: int, row_index: int, column_index: int) -> None:
         """
-        Inserts digit and sets sudoku array status on "changed".
-        :param digit: evaluating digit
+        Inserts number and sets sudoku array status on "changed".
+        :param digit: evaluating number
         :param row_index: row coordinate of cell to fill
         :param column_index: column coordinate of cell to fill
         :return: None
@@ -350,7 +350,7 @@ class SudokuSolver:
     def positions_in_one_row_or_column(positions_in_squares) -> Tuple[List[Tuple[int, int]], List[Tuple[int, int]]]:
         """
         Checks how many available blank cells is in each row and collumn.
-        If row/column has only one available cell, it can be filled with digit.
+        If row/column has only one available cell, it can be filled with number.
         :param positions_in_squares:
         :return: list of available blank cells' coordinates, list of black cells' coordinates which can be filled
         """
@@ -362,7 +362,7 @@ class SudokuSolver:
 
     def after_change_procedure(self) -> None:
         """
-        After inserted a digit, stack has elements to check for easy solving.
+        After inserted a number, stack has elements to check for easy solving.
         Also lists of possible digits for all blank cells need to be clared.
         Program's counter resets.
         :return: None
@@ -374,9 +374,9 @@ class SudokuSolver:
 
     def apply_solutions(self, digit, solutions) -> None:
         """
-        Insert digit into all available cells.
-        :param digit: digit to insert in available cells
-        :param solutions: list of coordinates digit can be inserted
+        Insert number into all available cells.
+        :param digit: number to insert in available cells
+        :param solutions: list of coordinates number can be inserted
         :return: None
         """
         if len(solutions):
@@ -386,8 +386,8 @@ class SudokuSolver:
 
     def digit_in_square(self, digit: int, square_number: int) -> bool:
         """
-        Checks if digit is already in square.
-        :param digit: digit we are evaluating
+        Checks if number is already in square.
+        :param digit: number we are evaluating
         :param square_number: index of square in list of sqares' coordinates
         :return: bool
         """
@@ -399,8 +399,8 @@ class SudokuSolver:
     def add_digit_to_blank_cells(self, digit: int, potential_positions: List[Tuple[int, int]]) -> None:
         """
         Fills dictionary of blank cells.
-        For every blank cell, if digit is permissible in that cell, digit is added to the list of digits.
-        :param digit: evaluating digit
+        For every blank cell, if number is permissible in that cell, number is added to the list of digits.
+        :param digit: evaluating number
         :param potential_positions: list of available blank cells' coordinates
         :return: None
         """
@@ -411,8 +411,8 @@ class SudokuSolver:
 
     def check_blank_cells(self) -> None:
         """
-        Checks if there are coordinates, which have only one permissible digit.
-        If so, digit can be inserted.
+        Checks if there are coordinates, which have only one permissible number.
+        If so, number can be inserted.
         :return: None
         """
         self.s.changed = False
@@ -510,7 +510,7 @@ class SudokuSolver:
     @staticmethod
     def positions_in_one_dimention(square_positions: List[Tuple[int, int]], flag: int) -> Optional[int]:
         """
-        If all possible coordinates (for particular digit) in square are located in one row or one column,
+        If all possible coordinates (for particular number) in square are located in one row or one column,
         that row/column can be deleted from the rest possible coordinates.
         :param square_positions: all possible coordinates in square
         :param flag: 0 for row, 1 for column
@@ -558,7 +558,7 @@ class SudokuSolver:
 
             if digit_index < len(self.s.possible_digits_in_cells[coordinate]):
                 digit = self.s.possible_digits_in_cells[coordinate][digit_index]
-                # self.s.array[coordinate[0], coordinate[1]] = digit
+                # self.s.array[coordinate[0], coordinate[1]] = number
                 insertion_list.append((coordinate, digit))
             else:
                 digits_counter[coordinate] = 0
@@ -577,7 +577,7 @@ class SudokuSolver:
                     return None
                 digits_counter[coordinate] += 1
                 cell_index += 1
-                # print(f'Digit: {digit}')
+                # print(f'Digit: {number}')
                 # print('next cell')
                 # print()
                 continue

@@ -43,7 +43,7 @@ class EntryCell:
     @staticmethod
     def input_validation(input_: str) -> bool:
         """
-        Checks if user input is valid, i.e. if it's digit in range <1;9>
+        Checks if user input is valid, i.e. if it's number in range <1;9>
         :param input_: user input
         :return: bool
         """

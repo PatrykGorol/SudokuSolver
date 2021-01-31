@@ -2,8 +2,10 @@
 <br>
 
 **Backtracking algoritm** for solving sudoku with GUI made in **Tkinter** and ready-to-use sudoku examples.
+<br>
+<br>
 
-![GUI EXAMPLE](/ReadMe/gui.JPG)
+![GUI EXAMPLE](/readme_resources/sudoku_example.png)
 <br>
 <br>
 
@@ -12,22 +14,28 @@
 2. [Backtracking](#backtracking)
 3. [Setup](#setup--requirements)
 <br>
-<br>
 
 ### Sudoku Rules
 Sudoku is a number puzzle in the shape of 9 x 9 grid.
 Grid can be divided into *9 rows*, *9 columns* and *9 boxes* (3 x 3 subgrids, also called "blocks" or "regions").
+
+![SUDOKU EXAMPLE](/readme_resources/sudoku_elements.png)
 <br>
-**Main rule:** Each row, columns and box has to contain 9 digits (from 1 to 9, without duplicates).
+
+**Main rule:** Each row, column and box has to contain 9 digits (from 1 to 9, without duplicates).
 <br>
 **Objective:** With partially filled grid one's objective is to complete the rest of digits.
 
-######*More information about sudoku can be found on Wikipedia: [history and variants](https://en.wikipedia.org/wiki/Sudoku), [solving algoritms](https://en.wikipedia.org/wiki/Sudoku_solving_algorithms).*
+*More information about sudoku can be found on Wikipedia: [history and variants](https://en.wikipedia.org/wiki/Sudoku), [solving algoritms](https://en.wikipedia.org/wiki/Sudoku_solving_algorithms).*
 
 ### Backtracking
 Before we start, program validates sudoku grid. If any row, column or box already contains more than 1 occurrence of digit, sudoku is unsolvable.
 <br><br>
-**Solving procedure (metacode)**
+**Solving procedure**
+
+
+![SOLVING PROCEDURE](/readme_resources/backtracking_scheme.png)
+
 
 * Create *list of empty cells*.
   

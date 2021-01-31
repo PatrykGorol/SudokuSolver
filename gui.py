@@ -44,7 +44,7 @@ class EntryCell:
     @staticmethod
     def input_validation(input_: str) -> bool:
         """
-        Checks if user input is valid, i.e. if it's digit in range <1;9>
+        Checks if user input is valid, i.e. if it's number in range <1;9>
         :param input_: user input
         :return: bool
         """
@@ -132,12 +132,12 @@ class Window:
             solver.solve()
             self.get_result(solver)
         elif validation == -1:
-            self.status_bar.config(text='This sudoku array contains invalid digits.', fg='red')
+            self.status_bar.config(text='This sudoku array contains invalid numbers.', fg='red')
         return None
 
     def get_data(self) -> List[List[int]]:
         """
-        Maps entered sudoku data as nested array of digits.
+        Maps entered sudoku data as nested array of numbers.
         :return: sudoku array
         """
         sudoku_array = []
@@ -153,12 +153,12 @@ class Window:
         :return: None
         """
         if solver.is_sudoku_completed():
-            self.insert_digits(solver)
+            self.insert_numbers(solver)
         else:
             self.status_bar.config(text='This sudoku is unsolvable.', fg='red')
         return None
 
-    def insert_digits(self, solver) -> None:
+    def insert_numbers(self, solver) -> None:
         """
         Inserts solving results into sudoku grid in window.
         :param solver: solver object containing completed array
