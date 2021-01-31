@@ -13,9 +13,12 @@
 1. [Sudoku Rules](#sudoku-rules)
 2. [Backtracking](#backtracking)
 3. [Setup](#setup--requirements)
-<br>
+
 ---
+
 ### Sudoku Rules
+<br>
+
 Sudoku is a number puzzle in the shape of 9 x 9 grid.
 Grid can be divided into *9 rows*, *9 columns* and *9 boxes* (3 x 3 subgrids, also called "blocks" or "regions").
 
