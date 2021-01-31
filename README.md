@@ -8,13 +8,13 @@
 ![GUI EXAMPLE](/readme_resources/sudoku_example.png)
 <br>
 <br>
-
+---
 ### LIST OF CONTENT
 1. [Sudoku Rules](#sudoku-rules)
 2. [Backtracking](#backtracking)
 3. [Setup](#setup--requirements)
 <br>
-
+---
 ### Sudoku Rules
 Sudoku is a number puzzle in the shape of 9 x 9 grid.
 Grid can be divided into *9 rows*, *9 columns* and *9 boxes* (3 x 3 subgrids, also called "blocks" or "regions").
@@ -28,20 +28,25 @@ Grid can be divided into *9 rows*, *9 columns* and *9 boxes* (3 x 3 subgrids, al
 
 *More information about sudoku can be found on Wikipedia: [history and variants](https://en.wikipedia.org/wiki/Sudoku), [solving algoritms](https://en.wikipedia.org/wiki/Sudoku_solving_algorithms).*
 
+---
 ### Backtracking
 Before we start, program validates sudoku grid. If any row, column or box already contains more than 1 occurrence of digit, sudoku is unsolvable.
 <br><br>
 **Solving procedure**
 
+<br>
+
 
 ![SOLVING PROCEDURE](/readme_resources/backtracking_scheme.png)
 
+<br>
 
+**METACODE**
+
+---
 * Create *list of empty cells*.
-  
 
 * Assign *test number* to every empty cell (we will start with the lowest number: 1).
-  
 
 * Create *cell index*. It will point empty cell, we're currently working with (starting with 0).
   
@@ -64,6 +69,7 @@ Before we start, program validates sudoku grid. If any row, column or box alread
     
     <br>5. Increment *test number* (if we come back to that cell, we will start testing from next number).
 
+---
 ### Setup / Requirements
 * **Python**, version **3.7**.
 * Additional packages required: **Numpy 1.20.0** (allows easy slicing of 2 dimensional array).
