@@ -1,20 +1,19 @@
-import numpy as np
-import tkinter as tk
-
-from re import fullmatch
-from typing import List
 from random import choice
 
-from sudokusolver import SudokuSolver
-from examples import sudoku_examples
+from solver import SudokuSolver
+from examples import *
+
+import tkinter as tk
+from re import fullmatch
+from typing import List
 
 
 class EntryCell:
 
     def __init__(self, cell: tk.Frame):
         self._text = tk.StringVar()
-        self.entry = tk.Entry(cell, borderwidth=0, justify='center', font='Helvetica 16 bold', textvariable=self._text)
-        self.entry.place(relwidth=1.0, relheigh=1.0)
+        self.entry = tk.Entry(cell, borderwidth=0, justify='center', font='Helvetica 14 bold', textvariable=self._text)
+        self.entry.place(width=33, heigh=33)
         self._text.trace("w", lambda *args: self.character_limit())
 
     @property
@@ -22,8 +21,9 @@ class EntryCell:
         return self._text.get()
 
     @text.setter
-    def text(self, value: str):
+    def text(self, value: str) -> None:
         self._text.set(value)
+        return None
 
     def character_limit(self) -> None:
         """
@@ -69,7 +69,7 @@ class Window:
         :return: None
         """
         master.title('SudokuSolver')
-        # master.iconbitmap(r'sudoku.ico')
+        master.iconbitmap(r'sudoku.ico')
         instruction = tk.Label(master, text='Insert Sudoku below.', font=20)
         instruction.grid(row=0, column=0, columnspan=9, pady=10)
         return None
@@ -97,7 +97,7 @@ class Window:
         for square_row in range(3):
             for square_column in range(3):
                 square = tk.Frame(main_frame, highlightbackground='black', highlightcolor='red',
-                                  highlightthickness=1, width=150, heigh=150, padx=0)
+                                  highlightthickness=1, width=120, heigh=120, padx=0)
                 square.grid(row=square_row, column=square_column)
                 self.create_cells_and_entries(square, square_row)
         return None
@@ -111,8 +111,9 @@ class Window:
         """
         for row in range(3):
             for column in range(3):
-                cell = tk.Frame(frame, bg='white', highlightbackground='black', highlightcolor='black',
-                                highlightthickness=0.5, width=50, heigh=50)
+                cell = tk.Frame(frame, bg='white', highlightbackground='black',
+                                highlightcolor='black', highlightthickness=0.5,
+                                width=40, heigh=40, padx=3, pady=3)
                 cell.grid(row=row, column=column)
                 row_index = square_row * 3 + row
                 entry_cell = EntryCell(cell)
@@ -124,10 +125,11 @@ class Window:
         Checks if sudoku array is valid and runs solving procedures.
         :return: None
         """
-        solver = SudokuSolver(self.get_data())
+        sudoku = Sudoku(self.get_data())
+        solver = SudokuSolver(sudoku)
         validation = solver.validate_sudoku()
         if validation == 1:
-            solver.solve()
+            solver.main_sequence()
             self.get_result(solver)
         elif validation == -1:
             self.status_bar.config(text='This sudoku array contains invalid digits.', fg='red')
@@ -151,6 +153,7 @@ class Window:
         :return: None
         """
         if solver.is_sudoku_completed():
+        # if True:
             self.insert_digits(solver)
         else:
             self.status_bar.config(text='This sudoku is unsolvable.', fg='red')
@@ -165,7 +168,7 @@ class Window:
         for row in range(9):
             for column in range(9):
                 if self.entries[row][column].text == '':
-                    self.entries[row][column].text = solver.sudoku[row, column]
+                    self.entries[row][column].text = solver.s.array[row, column]
                     self.entries[row][column].entry.config(fg='blue')
         return None
 
@@ -186,10 +189,10 @@ class Window:
         Randomly chooses sudoku from saved examples and prints it into grid.
         :return: None
         """
-        random_sudoku = np.array(choice(sudoku_examples))
+        random_sudoku = choice(sudoku_examples)
         for row in range(9):
             for column in range(9):
-                self.entries[row][column].text = str(random_sudoku[row, column])
+                self.entries[row][column].text = str(random_sudoku.array[row, column])
                 self.entries[row][column].entry.config(fg='black')
         self.status_bar.config(text='Ready', fg='black')
         return None
