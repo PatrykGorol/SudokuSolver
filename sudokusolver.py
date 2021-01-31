@@ -36,12 +36,13 @@ class SudokuSolver:
                 self.insert_digit(row, column, digit)
                 i += 1
             self.digits[coords] += 1
+
         return None
 
     def validate_digit(self, row: int, column: int, digit: int) -> bool:
         '''
         Checks if digit is available in place indicated by coordinates.
-        If such number is already present in row, column or square, method returns False.
+        If such number is already present in row, column or box, method returns False.
         :param row: row coordinate of cell
         :param column: column coordinate of cell
         :param digit: digit for checking
@@ -51,8 +52,8 @@ class SudokuSolver:
             return False
         if digit in self.sudoku[:, column]:
             return False
-        row_square, column_square = row // 3 * 3, column // 3 * 3
-        if digit in self.sudoku[row_square:row_square + 3, column_square:column_square + 3]:
+        box_row, box_column = row // 3 * 3, column // 3 * 3
+        if digit in self.sudoku[box_row:box_row + 3, box_column:box_column + 3]:
             return False
         return True
 
@@ -69,7 +70,7 @@ class SudokuSolver:
 
     def validate_sudoku(self) -> int:
         """
-        Checks if sudoku array is valid, i.e. if rows, columns or squares don't contain duplicated digits.
+        Checks if sudoku array is valid, i.e. if rows, columns or boxes don't contain duplicated digits.
         :return: 0 if array is empty, 1 if is valid, -1 if invalid
         """
         if np.count_nonzero(self.sudoku) == 0:
@@ -80,7 +81,7 @@ class SudokuSolver:
 
     def check_occurences(self) -> bool:
         '''
-        Checks if every row, column and square contains only one occurrence of digit.
+        Checks if every row, column and box contains only one occurrence of digit.
         :return: True if sudoku is valid, otherwise False
         '''
         for i in range(0, 9):
@@ -89,10 +90,9 @@ class SudokuSolver:
                     return False
                 if np.count_nonzero(self.sudoku[:, i] == digit) > 1:
                     return False
-                row_square = i // 3 * 3
-                column_square = i * 3 - 3 * row_square
-                if np.count_nonzero(
-                        self.sudoku[row_square:row_square + 3, column_square:column_square + 3] == digit) > 1:
+                box_row = i // 3 * 3
+                box_column = 3 * (i - box_row)
+                if np.count_nonzero(self.sudoku[box_row:box_row + 3, box_column:box_column + 3] == digit) > 1:
                     return False
         return True
 

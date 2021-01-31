@@ -4,6 +4,7 @@ import tkinter as tk
 from re import fullmatch
 from typing import List
 from random import choice
+from platform import system
 
 from sudokusolver import SudokuSolver
 from examples import sudoku_examples
@@ -69,7 +70,8 @@ class Window:
         :return: None
         """
         master.title('SudokuSolver')
-        # master.iconbitmap(r'sudoku.ico')
+        if system() == 'Windows':
+            master.iconbitmap(r'sudoku.ico')    # doesn't work on linux
         instruction = tk.Label(master, text='Insert Sudoku below.', font=20)
         instruction.grid(row=0, column=0, columnspan=9, pady=10)
         return None
@@ -82,7 +84,7 @@ class Window:
         """
         solve_button = tk.Button(frame, text='Solve Sudoku', font=10, command=self.solve)
         solve_button.grid(row=9, column=0, pady=(10, 0))
-        examples_button = tk.Button(frame, text='Get example', font=1, command=self.example)
+        examples_button = tk.Button(frame, text='Get Example', font=1, command=self.example)
         examples_button.grid(row=9, column=1, pady=(10, 0))
         clear_button = tk.Button(frame, text='Clear Sudoku', font=10, command=self.clear)
         clear_button.grid(row=9, column=2, pady=(10, 0))
@@ -90,23 +92,23 @@ class Window:
 
     def create_grid(self, main_frame: tk.LabelFrame) -> None:
         """
-        Creates grid of sudoku squares.
-        :param main_frame: tkinter master element for a squares' grid
+        Creates grid of sudoku boxes.
+        :param main_frame: tkinter master element for a boxes' grid
         :return: None
         """
-        for square_row in range(3):
-            for square_column in range(3):
-                square = tk.Frame(main_frame, highlightbackground='black', highlightcolor='red',
-                                  highlightthickness=1, width=150, heigh=150, padx=0)
-                square.grid(row=square_row, column=square_column)
-                self.create_cells_and_entries(square, square_row)
+        for box_row in range(3):
+            for box_column in range(3):
+                box = tk.Frame(main_frame, highlightbackground='black', highlightcolor='red', highlightthickness=1,
+                               width=150, heigh=150, padx=0)
+                box.grid(row=box_row, column=box_column)
+                self.create_cells_and_entries(box, box_row)
         return None
 
-    def create_cells_and_entries(self, frame: tk.Frame, square_row: int) -> None:
+    def create_cells_and_entries(self, frame: tk.Frame, box_row: int) -> None:
         """
-        Creates  9 cells inside a square.
-        :param frame: tkinter maser element (square) for a cell
-        :param square_row: number of square's index
+        Creates  9 cells inside a box.
+        :param frame: tkinter maser element (box) for a cell
+        :param box_row: number of box's index
         :return: None
         """
         for row in range(3):
@@ -114,7 +116,7 @@ class Window:
                 cell = tk.Frame(frame, bg='white', highlightbackground='black', highlightcolor='black',
                                 highlightthickness=0.5, width=50, heigh=50)
                 cell.grid(row=row, column=column)
-                row_index = square_row * 3 + row
+                row_index = box_row * 3 + row
                 entry_cell = EntryCell(cell)
                 self.entries[row_index].append(entry_cell)
         return None
