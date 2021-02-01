@@ -9,7 +9,7 @@
 <br>
 <br>
 ---
-### LIST OF CONTENT
+### TABLE OF CONTENTS
 1. [Sudoku Rules](#sudoku-rules)
 2. [Backtracking](#backtracking)
 3. [Setup](#setup--requirements)
