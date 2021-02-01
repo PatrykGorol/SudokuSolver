@@ -87,5 +87,5 @@ hard_4 = Sudoku([[8, 0, 0, 0, 0, 0, 0, 0, 0],
                  [0, 0, 8, 5, 0, 0, 0, 1, 0],
                  [0, 9, 0, 0, 0, 0, 4, 0, 0]])
 
-# sudoku_examples = [easy_1, easy_2, medium_1, medium_2, hard_1, hard_2, hard_3]
-sudoku_examples = [hard_4]
+sudoku_examples = [easy_1, easy_2, medium_1, medium_2, hard_1, hard_2, hard_3, hard_4]
+# sudoku_examples = [hard_4]

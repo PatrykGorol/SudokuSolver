@@ -22,20 +22,20 @@ class SudokuSolver:
         '''
         cell_index = 0
         while cell_index < len(self.empty_cells):
-            coords = self.empty_cells[cell_index]
-            row, column = coords
-            number = self.test_numbers[coords]
+            coordinates = self.empty_cells[cell_index]
+            row, column = coordinates
+            number = self.test_numbers[coordinates]
 
             if number == 10:
                 self.insert_number(row, column)
-                self.test_numbers[coords] = 1
+                self.test_numbers[coordinates] = 1
                 cell_index -= 1
                 continue
 
             if self.validate_number(row, column, number):
                 self.insert_number(row, column, number)
                 cell_index += 1
-            self.test_numbers[coords] += 1
+            self.test_numbers[coordinates] += 1
 
         return None
 

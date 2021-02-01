@@ -1,7 +1,7 @@
 ## SUDOKU SOLVER
 <br>
 
-**Backtracking algoritm** for solving sudoku with GUI made in **Tkinter** and ready-to-use sudoku examples.
+**Backtracking algorithm** for solving sudoku with GUI made in **Tkinter** and ready-to-use sudoku examples.
 <br>
 <br>
 
@@ -29,7 +29,7 @@ Grid can be divided into *9 rows*, *9 columns* and *9 boxes* (3 x 3 subgrids, al
 <br>
 **Objective:** With partially filled grid one's objective is to complete the rest of digits.
 
-*More information about sudoku can be found on Wikipedia: [history and variants](https://en.wikipedia.org/wiki/Sudoku), [solving algoritms](https://en.wikipedia.org/wiki/Sudoku_solving_algorithms).*
+*More information about sudoku can be found on Wikipedia: [history and variants](https://en.wikipedia.org/wiki/Sudoku), [solving algorithms](https://en.wikipedia.org/wiki/Sudoku_solving_algorithms).*
 
 ---
 ### Backtracking

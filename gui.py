@@ -66,7 +66,7 @@ class Window:
     def set_general_properties(self, master) -> None:
         """
         Sets properties of tkinter window: title, icon and upper grid with label.
-        :param master: thinter object
+        :param master: tkinter object
         :return: None
         """
         master.title('SudokuSolver')
