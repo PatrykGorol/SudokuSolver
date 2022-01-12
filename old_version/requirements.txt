@@ -7,7 +7,7 @@ mkl-fft==1.0.15
 mkl-random==1.1.0
 mkl-service==2.3.0
 numpy==1.17.4
-pipenv==2018.11.26
+pipenv==2022.1.8
 six==1.13.0
 toml==0.10.0
 virtualenv-clone==0.5.3
