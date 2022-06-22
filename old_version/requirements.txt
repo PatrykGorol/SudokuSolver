@@ -6,7 +6,7 @@ Click==7.0
 mkl-fft==1.0.15
 mkl-random==1.1.0
 mkl-service==2.3.0
-numpy==1.17.4
+numpy==1.22.0
 pipenv==2018.11.26
 six==1.13.0
 toml==0.10.0
